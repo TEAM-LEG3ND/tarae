@@ -1,0 +1,5 @@
+server:
+  port: 8081
+login:
+  oauthServerUrl: http://localhost:8080/api/v1/auth/login
+  redirectUri: http://localhost:8081/api/v1/auth/callback
