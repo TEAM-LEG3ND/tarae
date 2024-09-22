@@ -15,9 +15,9 @@ class LoginController(
 ) {
     @GetMapping("/login")
     fun login(): ResponseEntity<RedirectUriResponseDto> {
-        val result = loginService.login()
+        val redirectUri = loginService.login()
 
-        return ResponseEntity.ok(Json.decodeFromString<RedirectUriResponseDto>(result))
+        return ResponseEntity.ok(RedirectUriResponseDto(redirectUri.redirectUri))
     }
 
     @ExceptionHandler(RuntimeException::class)
