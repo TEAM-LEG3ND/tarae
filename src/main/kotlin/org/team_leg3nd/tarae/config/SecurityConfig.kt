@@ -15,7 +15,7 @@ class SecurityConfig {
             .csrf { it.disable() }
             .authorizeHttpRequests { authz ->
                 authz
-                    .requestMatchers("/api/login").permitAll()
+                    .requestMatchers("/api/v1/auth/*").permitAll()
                     .anyRequest().authenticated()
             }
 

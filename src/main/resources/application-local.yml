@@ -1,5 +1,8 @@
 server:
   port: 8080
-login:
-  oauthServerUrl: http://localhost:8080/api/v1/auth/login
+auth:
+  host: https://turnstile.server.d0lim.com
+  path:
+    login: /api/v1/auth/login
+    callback: /api/v1/auth/callback
   redirectUri: http://localhost:8080/api/v1/auth/callback

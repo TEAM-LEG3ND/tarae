@@ -5,14 +5,20 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 @ConfigurationProperties(prefix = "")
 class AppProperty(
     val server: ServerProperty,
-    val login: LoginProperty
+    val auth: AuthProperty
 ) {
     data class ServerProperty(
         var port: Int
     )
 
-    data class LoginProperty(
-        var oauthServerUrl: String = "",
+    data class AuthProperty(
+        var host: String = "",
+        var path: AuthPath = AuthPath(),
         var redirectUri: String = ""
-    )
+    ) {
+        data class AuthPath(
+            var login: String = "",
+            var callback: String = ""
+        )
+    }
 }
