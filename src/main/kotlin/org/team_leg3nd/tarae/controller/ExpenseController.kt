@@ -17,20 +17,20 @@ class ExpenseController(private val expenseService: ExpenseService) {
         return ResponseEntity.ok(expense.toResponseDto())
     }
 
-    @GetMapping("/{id}")
-    fun getExpense(@PathVariable id: String): ResponseEntity<ExpenseResponseDto> {
+    @GetMapping("/id")
+    fun getExpense(@RequestParam id: String): ResponseEntity<ExpenseResponseDto> {
         val expense = expenseService.getExpense(id)
         return ResponseEntity.ok(expense.toResponseDto())
     }
 
-    @PutMapping("/{id}")
-    fun updateExpense(@PathVariable id: String, @RequestBody expenseRequestDto: ExpenseRequestDto): ResponseEntity<ExpenseResponseDto> {
+    @PutMapping("/id")
+    fun updateExpense(@RequestParam id: String, @RequestBody expenseRequestDto: ExpenseRequestDto): ResponseEntity<ExpenseResponseDto> {
         val updatedExpense = expenseService.updateExpense(id, expenseRequestDto)
         return ResponseEntity.ok(updatedExpense.toResponseDto())
     }
 
-    @DeleteMapping("/{id}")
-    fun deleteExpense(@PathVariable id: String): ResponseEntity<Void> {
+    @DeleteMapping("/id")
+    fun deleteExpense(@RequestParam id: String): ResponseEntity<Void> {
         expenseService.deleteExpense(id)
         return ResponseEntity.noContent().build()
     }
@@ -43,7 +43,7 @@ class ExpenseController(private val expenseService: ExpenseService) {
 
     // Expense.paidBy로 지출 조회
     @GetMapping("/paidBy")
-    fun getExpenseByPaidBy(@RequestBody paidBy: String): List<Expense> {
+    fun getExpenseByPaidBy(@RequestParam paidBy: String): List<Expense> {
         return expenseService.getExpenseByPaidBy(paidBy)
     }
 

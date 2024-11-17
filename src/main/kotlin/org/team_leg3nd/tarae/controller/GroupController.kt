@@ -19,21 +19,21 @@ class GroupController(private val groupService: GroupService) {
     }
 
     // 그룹 조회
-    @GetMapping("/{id}")
+    @GetMapping("/id")
     fun getGroup(@PathVariable id: String): ResponseEntity<GroupResponseDto> {
         val group = groupService.getGroup(id)
         return ResponseEntity.ok(group.toResponseDto())
     }
 
     // 그룹 수정
-    @PutMapping("/{id}")
+    @PutMapping("/id")
     fun updateGroup(@PathVariable id: String, @RequestBody groupRequestDto: GroupRequestDto): ResponseEntity<GroupResponseDto> {
         val updatedGroup = groupService.updateGroup(id, groupRequestDto)
         return ResponseEntity.ok(updatedGroup.toResponseDto())
     }
 
     // 그룹 삭제
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id")
     fun deleteGroup(@PathVariable id: String): ResponseEntity<Void> {
         groupService.deleteGroup(id)
         return ResponseEntity.noContent().build()
@@ -46,8 +46,8 @@ class GroupController(private val groupService: GroupService) {
     }
 
     // Group.name으로 그룹 조회
-    @GetMapping("/name/{name}")
-    fun getGroupByName(@PathVariable name: String): Group? {
+    @GetMapping("/name")
+    fun getGroupByName(@RequestParam name: String): Group? {
         return groupService.getGroupByName(name)
     }
 
