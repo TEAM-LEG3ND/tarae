@@ -1,21 +1,47 @@
 package org.team_leg3nd.tarae.service
 
 import org.springframework.stereotype.Service
+import org.team_leg3nd.tarae.controller.dto.request.ExpenseRequestDto
 import org.team_leg3nd.tarae.entity.Expense
+import org.team_leg3nd.tarae.exception.*
 import org.team_leg3nd.tarae.repository.ExpenseRepository
+import org.team_leg3nd.tarae.repository.MemberRepository
 
 @Service
-class ExpenseService(private val expenseRepository: ExpenseRepository) {
+class ExpenseService(
+    private val expenseRepository: ExpenseRepository,
+    private val memberRepository: MemberRepository
+) {
 
-    fun createExpense(expense: Expense) = expenseRepository.save(expense)
+    // 지출 생성
+    fun createExpense(expenseRequestDto: ExpenseRequestDto): Expense {
+        val paidByMembers = expenseRequestDto.paidBy.map { memberRepository.findById(it).orElseThrow { MemberNotFoundException("Member not found") } }
+        val sharedWithMembers = expenseRequestDto.sharedWith?.map { memberRepository.findById(it).orElseThrow { MemberNotFoundException("Member not found") } }
 
-    fun getExpenseById(id: String) = expenseRepository.findById(id).orElse(null)
+        val expense = Expense(description = expenseRequestDto.description, amount = expenseRequestDto.amount, paidBy = paidByMembers, sharedWith = sharedWithMembers)
+        return expenseRepository.save(expense)
+    }
 
-    fun getExpensesByMember(memberId: String) = expenseRepository.findByPaidBy(memberId)
+    // 지출 조회
+    fun getExpense(id: String): Expense {
+        return expenseRepository.findById(id).orElseThrow { ExpenseNotFoundException("Expense not found") }
+    }
 
-    fun updateExpense(id: String, expense: Expense) = expenseRepository.save(expense.copy(id = id))
+    // 지출 수정
+    fun updateExpense(id: String, expenseRequestDto: ExpenseRequestDto): Expense {
+        val existingExpense = expenseRepository.findById(id).orElseThrow { ExpenseNotFoundException("Expense not found") }
+        val paidByMembers = expenseRequestDto.paidBy.map { memberRepository.findById(it).orElseThrow { MemberNotFoundException("Member not found") } }
+        val sharedWithMembers = expenseRequestDto.sharedWith?.map { memberRepository.findById(it).orElseThrow { MemberNotFoundException("Member not found") } }
 
-    fun deleteExpense(id: String) = expenseRepository.deleteById(id)
+        val updatedExpense = existingExpense.copy(description = expenseRequestDto.description, amount = expenseRequestDto.amount, paidBy = paidByMembers, sharedWith = sharedWithMembers)
+        return expenseRepository.save(updatedExpense)
+    }
 
-    fun getAllExpenses() = expenseRepository.findAll()
+    // 지출 삭제
+    fun deleteExpense(id: String) {
+        val expense = expenseRepository.findById(id).orElseThrow { ExpenseNotFoundException("Expense not found") }
+        expenseRepository.delete(expense)
+    }
 }
+
+
