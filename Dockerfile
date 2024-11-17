@@ -5,8 +5,8 @@ WORKDIR /workspace/app
 # 소스 코드 및 Gradle 래퍼를 복사
 COPY gradlew .
 COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
+COPY build.gradle.kts .
+COPY settings.gradle.kts .
 COPY src src
 
 # 의존성을 다운로드하고 애플리케이션 빌드
