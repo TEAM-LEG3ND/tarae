@@ -6,5 +6,7 @@ import org.team_leg3nd.tarae.entity.Expense
 
 @Repository
 interface ExpenseRepository : MongoRepository<Expense, String> {
-    fun findByPaidBy(id: String): List<Expense>
+    fun findByPaidBy(name: String): List<Expense>
+
+    override fun findAll(): List<Expense>
 }

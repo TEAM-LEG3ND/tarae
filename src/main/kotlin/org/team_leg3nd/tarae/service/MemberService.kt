@@ -39,5 +39,15 @@ class MemberService(
         val member = memberRepository.findById(id).orElseThrow { MemberNotFoundException("Member not found") }
         memberRepository.delete(member)
     }
+
+    // 전체 멤버 조회
+    fun getAllMembers(): List<Member> {
+        return memberRepository.findAll()
+    }
+
+    // Member.name으로 멤버 조회
+    fun getMemberByName(name: String): Member? {
+        return memberRepository.findByName(name)
+    }
 }
 

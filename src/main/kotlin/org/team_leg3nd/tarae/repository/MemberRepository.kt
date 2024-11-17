@@ -7,5 +7,7 @@ import org.team_leg3nd.tarae.entity.Member
 
 @Repository
 interface MemberRepository : MongoRepository<Member, String> {
-    fun findByName(name: String): List<Member>
+    fun findByName(name: String): Member?
+
+    override fun findAll(): List<Member>
 }

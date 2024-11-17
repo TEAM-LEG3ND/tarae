@@ -44,5 +44,15 @@ class GroupService(
         val group = groupRepository.findById(id).orElseThrow { GroupNotFoundException("Group not found") }
         groupRepository.delete(group)
     }
+
+    // 전체 그룹 조회
+    fun getAllGroups(): List<Group> {
+        return groupRepository.findAll()
+    }
+
+    // Group.name으로 그룹 조회
+    fun getGroupByName(name: String): Group? {
+        return groupRepository.findByName(name)
+    }
 }
 
