@@ -8,6 +8,6 @@ data class Expense(
     @Id val id: String? = null,
     val description: String,
     val amount: Double,
-    val paidBy: Member,
+    val paidBy: List<Member>,
     val sharedWith: List<Member>? = null
 )
