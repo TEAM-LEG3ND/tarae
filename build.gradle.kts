@@ -3,6 +3,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.6"
     kotlin("jvm") version "1.9.24"
     kotlin("plugin.spring") version "1.9.24"
+    id("com.google.cloud.tools.jib") version "3.4.4"
 }
 
 group = "org.team_leg3nd"
@@ -42,4 +43,15 @@ kotlin {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+jib {
+    to {
+        image = System.getenv("REGISTRY_HOST") ?: ""
+        tags = setOf("latest")
+        auth {
+            username = System.getenv("REGISTRY_ID") ?: ""
+            password = System.getenv("REGISTRY_PASSWORD") ?: ""
+        }
+    }
 }
