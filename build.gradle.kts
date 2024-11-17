@@ -24,9 +24,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.hibernate.validator:hibernate-validator:6.2.0.Final")
-    implementation("org.postgresql:postgresql")
     implementation("org.springframework.data:spring-data-mongodb:4.3.3")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
