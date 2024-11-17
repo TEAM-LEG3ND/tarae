@@ -47,7 +47,7 @@ tasks.withType<Test> {
 
 jib {
     to {
-        image = System.getenv("REGISTRY_HOST") ?: ""
+        image = "your-registry-host/your-project-name/your-image-name"
         tags = setOf("latest")
         auth {
             username = System.getenv("REGISTRY_ID") ?: ""

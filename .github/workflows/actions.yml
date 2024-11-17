@@ -32,7 +32,7 @@ jobs:
           REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
         run: echo "Environment variables set"
       - name: Build and push Docker image
-        run: ./gradlew jib
+        run: ./gradlew jib --image=$REGISTRY_HOST/tarae
         env:
           REGISTRY_HOST: ${{ secrets.REGISTRY_HOST }}
           REGISTRY_ID: ${{ secrets.REGISTRY_ID }}
