@@ -19,22 +19,22 @@ class MemberController(private val memberService: MemberService) {
     }
 
     // 멤버 조회
-    @GetMapping("/id")
-    fun getMember(@RequestParam id: String): ResponseEntity<MemberResponseDto> {
+    @GetMapping("/id/{id}")
+    fun getMember(@PathVariable id: String): ResponseEntity<MemberResponseDto> {
         val member = memberService.getMember(id)
         return ResponseEntity.ok(member.toResponseDto())
     }
 
     // 멤버 수정
-    @PutMapping("/id")
-    fun updateMember(@RequestParam id: String, @RequestBody memberRequestDto: MemberRequestDto): ResponseEntity<MemberResponseDto> {
+    @PutMapping("/id/{id}")
+    fun updateMember(@PathVariable id: String, @RequestBody memberRequestDto: MemberRequestDto): ResponseEntity<MemberResponseDto> {
         val updatedMember = memberService.updateMember(id, memberRequestDto)
         return ResponseEntity.ok(updatedMember.toResponseDto())
     }
 
     // 멤버 삭제
-    @DeleteMapping("/id")
-    fun deleteMember(@RequestParam id: String): ResponseEntity<Void> {
+    @DeleteMapping("/id/{id}")
+    fun deleteMember(@PathVariable id: String): ResponseEntity<Void> {
         memberService.deleteMember(id)
         return ResponseEntity.noContent().build()
     }
@@ -46,8 +46,8 @@ class MemberController(private val memberService: MemberService) {
     }
 
     // Member.name으로 멤버 조회
-    @GetMapping("/name")
-    fun getMemberByName(@RequestParam name: String): Member? {
+    @GetMapping("/name/{name}")
+    fun getMemberByName(@PathVariable name: String): Member? {
         return memberService.getMemberByName(name)
     }
 
