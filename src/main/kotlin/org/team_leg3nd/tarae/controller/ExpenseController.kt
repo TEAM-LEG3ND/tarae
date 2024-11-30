@@ -73,6 +73,9 @@ class ExpenseController(
             paidBy = this.paidBy.map { id: String ->
                 memberService.getMember(id)
             },
+            sharedWith = this.sharedWith?.map { id: String ->
+                memberService.getMember(id)
+            }
         )
     }
 }

@@ -26,6 +26,10 @@ dependencies {
     implementation("org.hibernate.validator:hibernate-validator:6.2.0.Final")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
+    //logging
+    implementation("io.github.microutils:kotlin-logging:3.0.5")
+    implementation("ch.qos.logback:logback-classic:1.4.11")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.springframework.security:spring-security-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
