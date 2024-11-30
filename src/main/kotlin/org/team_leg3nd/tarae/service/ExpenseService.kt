@@ -38,11 +38,6 @@ class ExpenseService(
     fun getAllExpenses(): List<Expense> {
         return expenseRepository.findAll()
     }
-
-    // Expense.paidBy로 지출 조회
-    fun getExpenseByPaidBy(paidBy: String): List<Expense> {
-        return expenseRepository.findByPaidBy(paidBy)
-    }
 }
 
 

@@ -56,14 +56,6 @@ class ExpenseController(
         return ResponseEntity.ok(allExpenses.map { expense: Expense -> expense.toResponseDto() })
     }
 
-    // Expense.paidBy로 지출 조회
-    @GetMapping("/paidBy/{paidBy}")
-    fun getExpenseByPaidBy(@PathVariable paidBy: String): ResponseEntity<List<ExpenseResponseDto>> {
-        val expenseByPaidBy = expenseService.getExpenseByPaidBy(paidBy)
-
-        return ResponseEntity.ok(expenseByPaidBy.map { expense: Expense -> expense.toResponseDto() })
-    }
-
     fun Expense.toResponseDto(): ExpenseResponseDto {
         return ExpenseResponseDto(
             id = this.id ?: "",
