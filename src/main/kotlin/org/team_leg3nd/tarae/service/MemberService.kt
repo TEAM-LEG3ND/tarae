@@ -1,22 +1,17 @@
 package org.team_leg3nd.tarae.service
 
 import org.springframework.stereotype.Service
-import org.team_leg3nd.tarae.controller.dto.request.MemberRequestDto
 import org.team_leg3nd.tarae.entity.Member
 import org.team_leg3nd.tarae.repository.MemberRepository
 import org.team_leg3nd.tarae.exception.*
-import org.team_leg3nd.tarae.repository.ExpenseRepository
 
 @Service
 class MemberService(
     private val memberRepository: MemberRepository,
-    private val expenseRepository: ExpenseRepository
 ) {
 
     // 멤버 생성
-    fun createMember(memberRequestDto: MemberRequestDto): Member {
-        val paidExpenses = memberRequestDto.paidExpenses?.let { expenseRepository.findAllById(it) } ?: emptyList()
-        val member = Member(name = memberRequestDto.name, paidExpenses = paidExpenses)
+    fun createMember(member: Member): Member {
         return memberRepository.save(member)
     }
 
@@ -26,11 +21,10 @@ class MemberService(
     }
 
     // 멤버 수정
-    fun updateMember(id: String, memberRequestDto: MemberRequestDto): Member {
+    fun updateMember(id: String, member: Member): Member {
         val existingMember = memberRepository.findById(id).orElseThrow { MemberNotFoundException("Member not found") }
-        val paidExpenses = memberRequestDto.paidExpenses?.let { expenseRepository.findAllById(it) } ?: existingMember.paidExpenses
 
-        val updatedMember = existingMember.copy(name = memberRequestDto.name, paidExpenses = paidExpenses)
+        val updatedMember = existingMember.copy(name = member.name, paidExpenses = member.paidExpenses)
         return memberRepository.save(updatedMember)
     }
 

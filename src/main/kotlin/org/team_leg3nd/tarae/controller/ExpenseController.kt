@@ -6,14 +6,18 @@ import org.team_leg3nd.tarae.controller.dto.request.ExpenseRequestDto
 import org.team_leg3nd.tarae.controller.dto.response.ExpenseResponseDto
 import org.team_leg3nd.tarae.entity.Expense
 import org.team_leg3nd.tarae.service.ExpenseService
+import org.team_leg3nd.tarae.service.MemberService
 
 @RestController
 @RequestMapping("/api/expenses")
-class ExpenseController(private val expenseService: ExpenseService) {
+class ExpenseController(
+    private val expenseService: ExpenseService,
+    private val memberService: MemberService
+) {
 
     @PostMapping
     fun createExpense(@RequestBody expenseRequestDto: ExpenseRequestDto): ResponseEntity<ExpenseResponseDto> {
-        val expense = expenseService.createExpense(expenseRequestDto)
+        val expense = expenseService.createExpense(expenseRequestDto.toExpense())
         return ResponseEntity.ok(expense.toResponseDto())
     }
 
@@ -24,8 +28,11 @@ class ExpenseController(private val expenseService: ExpenseService) {
     }
 
     @PutMapping("/id/{id}")
-    fun updateExpense(@PathVariable id: String, @RequestBody expenseRequestDto: ExpenseRequestDto): ResponseEntity<ExpenseResponseDto> {
-        val updatedExpense = expenseService.updateExpense(id, expenseRequestDto)
+    fun updateExpense(
+        @PathVariable id: String,
+        @RequestBody expenseRequestDto: ExpenseRequestDto
+    ): ResponseEntity<ExpenseResponseDto> {
+        val updatedExpense = expenseService.updateExpense(id, expenseRequestDto.toExpense())
         return ResponseEntity.ok(updatedExpense.toResponseDto())
     }
 
@@ -50,7 +57,23 @@ class ExpenseController(private val expenseService: ExpenseService) {
     fun Expense.toResponseDto(): ExpenseResponseDto {
         val paidByNames = this.paidBy.map { it.name }
         val sharedWithNames = this.sharedWith?.map { it.name }
-        return ExpenseResponseDto(id = this.id ?: "", description = this.description, amount = this.amount, paidBy = paidByNames, sharedWith = sharedWithNames)
+        return ExpenseResponseDto(
+            id = this.id ?: "",
+            description = this.description,
+            amount = this.amount,
+            paidBy = paidByNames,
+            sharedWith = sharedWithNames
+        )
+    }
+
+    fun ExpenseRequestDto.toExpense(): Expense {
+        return Expense(
+            description = this.description,
+            amount = this.amount,
+            paidBy = this.paidBy.map { id: String ->
+                memberService.getMember(id)
+            },
+        )
     }
 }
 

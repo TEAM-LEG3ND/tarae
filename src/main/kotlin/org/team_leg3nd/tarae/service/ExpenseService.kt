@@ -1,24 +1,17 @@
 package org.team_leg3nd.tarae.service
 
 import org.springframework.stereotype.Service
-import org.team_leg3nd.tarae.controller.dto.request.ExpenseRequestDto
 import org.team_leg3nd.tarae.entity.Expense
 import org.team_leg3nd.tarae.exception.*
 import org.team_leg3nd.tarae.repository.ExpenseRepository
-import org.team_leg3nd.tarae.repository.MemberRepository
 
 @Service
 class ExpenseService(
     private val expenseRepository: ExpenseRepository,
-    private val memberRepository: MemberRepository
 ) {
 
     // 지출 생성
-    fun createExpense(expenseRequestDto: ExpenseRequestDto): Expense {
-        val paidByMembers = expenseRequestDto.paidBy.map { memberRepository.findById(it).orElseThrow { MemberNotFoundException("Member not found") } }
-        val sharedWithMembers = expenseRequestDto.sharedWith?.map { memberRepository.findById(it).orElseThrow { MemberNotFoundException("Member not found") } }
-
-        val expense = Expense(description = expenseRequestDto.description, amount = expenseRequestDto.amount, paidBy = paidByMembers, sharedWith = sharedWithMembers)
+    fun createExpense(expense: Expense): Expense {
         return expenseRepository.save(expense)
     }
 
@@ -28,12 +21,10 @@ class ExpenseService(
     }
 
     // 지출 수정
-    fun updateExpense(id: String, expenseRequestDto: ExpenseRequestDto): Expense {
+    fun updateExpense(id: String, expense: Expense): Expense {
         val existingExpense = expenseRepository.findById(id).orElseThrow { ExpenseNotFoundException("Expense not found") }
-        val paidByMembers = expenseRequestDto.paidBy.map { memberRepository.findById(it).orElseThrow { MemberNotFoundException("Member not found") } }
-        val sharedWithMembers = expenseRequestDto.sharedWith?.map { memberRepository.findById(it).orElseThrow { MemberNotFoundException("Member not found") } }
 
-        val updatedExpense = existingExpense.copy(description = expenseRequestDto.description, amount = expenseRequestDto.amount, paidBy = paidByMembers, sharedWith = sharedWithMembers)
+        val updatedExpense = existingExpense.copy(description = expense.description, amount = expense.amount, paidBy = expense.paidBy, sharedWith = expense.sharedWith)
         return expenseRepository.save(updatedExpense)
     }
 

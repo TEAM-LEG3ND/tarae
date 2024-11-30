@@ -5,16 +5,23 @@ import org.springframework.web.bind.annotation.*
 import org.team_leg3nd.tarae.controller.dto.request.GroupRequestDto
 import org.team_leg3nd.tarae.controller.dto.response.GroupResponseDto
 import org.team_leg3nd.tarae.entity.Group
+import org.team_leg3nd.tarae.entity.Member
+import org.team_leg3nd.tarae.service.ExpenseService
 import org.team_leg3nd.tarae.service.GroupService
+import org.team_leg3nd.tarae.service.MemberService
 
 @RestController
 @RequestMapping("/api/groups")
-class GroupController(private val groupService: GroupService) {
+class GroupController(
+    private val groupService: GroupService,
+    private val memberService: MemberService,
+    private val expenseService: ExpenseService
+) {
 
     // 그룹 생성
     @PostMapping
     fun createGroup(@RequestBody groupRequestDto: GroupRequestDto): ResponseEntity<GroupResponseDto> {
-        val group = groupService.createGroup(groupRequestDto)
+        val group = groupService.createGroup(groupRequestDto.toGroup())
         return ResponseEntity.ok(group.toResponseDto())
     }
 
@@ -27,8 +34,11 @@ class GroupController(private val groupService: GroupService) {
 
     // 그룹 수정
     @PutMapping("/id/{id}")
-    fun updateGroup(@PathVariable id: String, @RequestBody groupRequestDto: GroupRequestDto): ResponseEntity<GroupResponseDto> {
-        val updatedGroup = groupService.updateGroup(id, groupRequestDto)
+    fun updateGroup(
+        @PathVariable id: String,
+        @RequestBody groupRequestDto: GroupRequestDto
+    ): ResponseEntity<GroupResponseDto> {
+        val updatedGroup = groupService.updateGroup(id, groupRequestDto.toGroup())
         return ResponseEntity.ok(updatedGroup.toResponseDto())
     }
 
@@ -55,6 +65,18 @@ class GroupController(private val groupService: GroupService) {
         val memberNames = this.members?.map { it.name }
         val expenseIds = this.expenses?.map { it.id!! }
         return GroupResponseDto(id = this.id ?: "", name = this.name, members = memberNames, expenses = expenseIds)
+    }
+
+    fun GroupRequestDto.toGroup(): Group {
+        return Group(
+            name = this.name,
+            members = this.members?.map { id: String ->
+                memberService.getMember(id)
+            },
+            expenses = this.expenses?.map { id: String ->
+                expenseService.getExpense(id)
+            }
+        )
     }
 }
 
