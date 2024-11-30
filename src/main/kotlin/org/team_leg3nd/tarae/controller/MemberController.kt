@@ -1,5 +1,6 @@
 package org.team_leg3nd.tarae.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.team_leg3nd.tarae.controller.dto.request.MemberRequestDto
@@ -17,7 +18,7 @@ class MemberController(
     private val expenseService: ExpenseService
 ) {
 
-    // 멤버 생성
+    @Operation(summary = "create member", description = "create member")
     @PostMapping
     fun createMember(@RequestBody memberRequestDto: MemberRequestDto): ResponseEntity<MemberResponseDto> {
         val member = memberService.createMember(memberRequestDto.toMember())
@@ -25,7 +26,7 @@ class MemberController(
         return ResponseEntity.ok(member.toResponseDto())
     }
 
-    // 멤버 조회
+    @Operation(summary = "read member", description = "read member")
     @GetMapping("/id/{id}")
     fun getMember(@PathVariable id: String): ResponseEntity<MemberResponseDto> {
         val member = memberService.getMember(id)
@@ -33,7 +34,7 @@ class MemberController(
         return ResponseEntity.ok(member.toResponseDto())
     }
 
-    // 멤버 수정
+    @Operation(summary = "update member", description = "It is updated with values sent to the request body")
     @PutMapping("/id/{id}")
     fun updateMember(
         @PathVariable id: String,
@@ -44,7 +45,7 @@ class MemberController(
         return ResponseEntity.ok(updatedMember.toResponseDto())
     }
 
-    // 멤버 삭제
+    @Operation(summary = "delete member", description = "delete member")
     @DeleteMapping("/id/{id}")
     fun deleteMember(@PathVariable id: String): ResponseEntity<Void> {
         memberService.deleteMember(id)
@@ -52,7 +53,7 @@ class MemberController(
         return ResponseEntity.noContent().build()
     }
 
-    // 전체 멤버 조회
+    @Operation(summary = "read all member", description = "read all member")
     @GetMapping
     fun getAllMembers(): ResponseEntity<List<MemberResponseDto>> {
         val allMembers = memberService.getAllMembers()
@@ -60,7 +61,7 @@ class MemberController(
         return ResponseEntity.ok(allMembers.map { member: Member -> member.toResponseDto() })
     }
 
-    // Member.name으로 멤버 조회
+    @Operation(summary = "read member by name", description = "read member by name")
     @GetMapping("/name/{name}")
     fun getMemberByName(@PathVariable name: String): ResponseEntity<MemberResponseDto> {
         val memberByName = memberService.getMemberByName(name)

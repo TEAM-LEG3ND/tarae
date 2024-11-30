@@ -1,5 +1,6 @@
 package org.team_leg3nd.tarae.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.team_leg3nd.tarae.controller.dto.request.GroupRequestDto
@@ -21,7 +22,7 @@ class GroupController(
     private val expenseService: ExpenseService
 ) {
 
-    // 그룹 생성
+    @Operation(summary = "create group", description = "create group")
     @PostMapping
     fun createGroup(@RequestBody groupRequestDto: GroupRequestDto): ResponseEntity<GroupResponseDto> {
         val group = groupService.createGroup(groupRequestDto.toGroup())
@@ -29,7 +30,7 @@ class GroupController(
         return ResponseEntity.ok(group.toResponseDto())
     }
 
-    // 그룹 조회
+    @Operation(summary = "read group", description = "read group")
     @GetMapping("/id/{id}")
     fun getGroup(@PathVariable id: String): ResponseEntity<GroupResponseDto> {
         val group = groupService.getGroup(id)
@@ -37,7 +38,7 @@ class GroupController(
         return ResponseEntity.ok(group.toResponseDto())
     }
 
-    // 그룹 수정
+    @Operation(summary = "update group", description = "It is updated with values sent to the request body")
     @PutMapping("/id/{id}")
     fun updateGroup(
         @PathVariable id: String,
@@ -48,7 +49,7 @@ class GroupController(
         return ResponseEntity.ok(updatedGroup.toResponseDto())
     }
 
-    // 그룹 삭제
+    @Operation(summary = "delete group", description = "delete group")
     @DeleteMapping("/id/{id}")
     fun deleteGroup(@PathVariable id: String): ResponseEntity<Void> {
         groupService.deleteGroup(id)
@@ -56,7 +57,7 @@ class GroupController(
         return ResponseEntity.noContent().build()
     }
 
-    // 전체 그룹 조회
+    @Operation(summary = "read all group", description = "read all group")
     @GetMapping
     fun getAllGroups(): ResponseEntity<List<GroupResponseDto>> {
         val allGroups = groupService.getAllGroups()

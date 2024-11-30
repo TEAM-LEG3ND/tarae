@@ -1,5 +1,6 @@
 package org.team_leg3nd.tarae.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.team_leg3nd.tarae.controller.dto.request.ExpenseRequestDto
@@ -17,6 +18,7 @@ class ExpenseController(
     private val memberService: MemberService
 ) {
 
+    @Operation(summary = "create expense", description = "create expense")
     @PostMapping
     fun createExpense(@RequestBody expenseRequestDto: ExpenseRequestDto): ResponseEntity<ExpenseResponseDto> {
         val expense = expenseService.createExpense(expenseRequestDto.toExpense())
@@ -24,6 +26,7 @@ class ExpenseController(
         return ResponseEntity.ok(expense.toResponseDto())
     }
 
+    @Operation(summary = "read expense", description = "read expense")
     @GetMapping("/id/{id}")
     fun getExpense(@PathVariable id: String): ResponseEntity<ExpenseResponseDto> {
         val expense = expenseService.getExpense(id)
@@ -31,6 +34,7 @@ class ExpenseController(
         return ResponseEntity.ok(expense.toResponseDto())
     }
 
+    @Operation(summary = "update expense", description = "It is updated with values sent to the request body")
     @PutMapping("/id/{id}")
     fun updateExpense(
         @PathVariable id: String,
@@ -41,6 +45,7 @@ class ExpenseController(
         return ResponseEntity.ok(updatedExpense.toResponseDto())
     }
 
+    @Operation(summary = "delete expense", description = "delete expense")
     @DeleteMapping("/id/{id}")
     fun deleteExpense(@PathVariable id: String): ResponseEntity<Void> {
         expenseService.deleteExpense(id)
@@ -48,7 +53,7 @@ class ExpenseController(
         return ResponseEntity.noContent().build()
     }
 
-    // 전체 지출 조회
+    @Operation(summary = "read all expense", description = "read all expense")
     @GetMapping
     fun getAllExpenses(): ResponseEntity<List<ExpenseResponseDto>> {
         val allExpenses = expenseService.getAllExpenses()
